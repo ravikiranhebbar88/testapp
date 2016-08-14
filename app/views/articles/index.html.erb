@@ -1,10 +1,10 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Listing Articles</h1>
+<h1>Articles</h1><br/>
 
 <% unless @articles.empty? %>
 
-    <table border="1">
+    <table class="table table-bordered"S>
     <thead>
       <tr>
         <th>Title</th>
@@ -19,10 +19,10 @@
       <% @articles.each do |article| %>
         <tr>
           <td><%= article.title %></td>
-          <td><%= article.description %></td>
+          <td><%= raw(article.description) %></td>
           <td><%= link_to 'Show', article %></td>
           <td><%= link_to 'Edit', edit_article_path(article) %></td>
-          <% link_to 'Destroy', article, method: :delete, data: { confirm: 'Are you sure?' } %>
+          <td><%= link_to 'Destroy', article, method: :delete, data: { confirm: 'Are you sure?' } %></td>
         </tr>
       <% end %>
     </tbody>
@@ -31,6 +31,7 @@
 <br>
 
 <%= link_to 'Create New Article', new_article_path %>
+
 
 <p><%= link_to "Back to Home Page", root_path %></p>
 

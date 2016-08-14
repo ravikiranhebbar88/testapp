@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-
+  mount Bootsy::Engine => '/bootsy', as: 'bootsy'
   resources :articles
   root 'welcome#home'
   get 'about' => 'welcome#about'
