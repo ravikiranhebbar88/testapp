@@ -8,13 +8,10 @@
   <%= raw(@article.description) %>
 </p>
 
-
-<% unless @article.tags.empty? %>
 <p>
   <strong>Tags:</strong>
-   <%= @article.tags.map{|t|t.name}.join(', ')%>
+   <%= @article.tags.empty? ? 'no tags present' : @article.tags.map{|t|t.name}.join(', ')%>
 </p>  
-<% end %>
 
 
 
