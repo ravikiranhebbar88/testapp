@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :tags
   mount Bootsy::Engine => '/bootsy', as: 'bootsy'
   resources :articles
   root 'welcome#home'

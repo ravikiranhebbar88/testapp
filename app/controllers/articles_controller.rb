@@ -17,19 +17,30 @@ class ArticlesController < ApplicationController
   # GET /articles/new
   def new
     @article = Article.new
+    @tags = @article.tags
   end
 
   # GET /articles/1/edit
   def edit
+    @article = Article.find(params[:id])
+    @tags = @article.tags
   end
 
   # POST /articles
   # POST /articles.json
   def create
     @article = Article.new(article_params)
-
     respond_to do |format|
       if @article.save
+        params[:tags].each do |tag|
+          if tag.to_i == 0
+               tag = Tag.create!(name: tag)
+               tag = tag.id
+          else
+               tag = tag.to_i
+          end 
+          ArticleTag.create!(:article_id => @article.id,:tag_id => tag.to_i)  
+        end  
         format.html { redirect_to @article, notice: 'Article was successfully created.' }
         format.json { render :show, status: :created, location: @article }
       else
@@ -44,6 +55,27 @@ class ArticlesController < ApplicationController
   def update
     respond_to do |format|
       if @article.update(article_params)
+        if params[:tags]
+           article_tags = ArticleTag.where.not(tag_id: params[:tags].map(&:to_i))
+           if article_tags
+             tag_array = []
+             article_tags.collect{|a|tag_array << a.tag_id}
+             ArticleTag.where(article_id: @article.id,tag_id: tag_array).destroy_all
+           end  
+           params[:tags].each do |tag|
+             if tag.to_i == 0
+               tag = Tag.create!(name: tag)
+               tag = tag.id
+             else
+               tag = tag.to_i
+             end 
+             unless ArticleTag.exists?(:article_id => @article.id,:tag_id => tag)
+               ArticleTag.create!(:article_id =>@article.id, :tag_id => tag.to_i)
+             end
+           end 
+        elsif ArticleTag.exists?(article_id: @article.id)
+            ArticleTag.where(article_id: @article.id).destroy_all
+        end  
         format.html { redirect_to @article, notice: 'Article was successfully updated.' }
         format.json { render :show, status: :ok, location: @article }
       else
@@ -57,6 +89,7 @@ class ArticlesController < ApplicationController
   # DELETE /articles/1.json
   def destroy
     @article.destroy
+    ArticleTag.where(article_id: @article.id).destroy_all
     respond_to do |format|
       format.html { redirect_to articles_url, notice: 'Article was successfully destroyed.' }
       format.json { head :no_content }

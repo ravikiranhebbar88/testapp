@@ -26,6 +26,9 @@ gem 'bootstrap-sass', '~> 3.3.6'
 
 gem "bootsy"
 
+gem 'compass-rails'
+gem 'chosen-rails'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

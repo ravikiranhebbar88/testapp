@@ -14,5 +14,6 @@
 //= require jquery_ujs
 //= require bootstrap-sprockets
 //= require bootsy
+//= require chosen-jquery
 //= require_tree .
 
