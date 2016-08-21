@@ -31,23 +31,25 @@ class ArticlesController < ApplicationController
   def create
     @article = current_user.articles.build(article_params)
     respond_to do |format|
-      if @article.save
-        params[:tags].each do |tag|
-          if tag.to_i == 0
-               tag = Tag.create!(name: tag)
-               tag = tag.id
-          else
-               tag = tag.to_i
+     if @article.save
+       if params[:tags] 
+          params[:tags].each do |tag|
+            if tag.to_i == 0
+                 tag = Tag.create!(name: tag)
+                 tag = tag.id
+            else
+                 tag = tag.to_i
+            end 
+            ArticleTag.create!(:article_id => @article.id,:tag_id => tag.to_i)  
           end 
-          ArticleTag.create!(:article_id => @article.id,:tag_id => tag.to_i)  
-        end  
+        end   
         format.html { redirect_to @article, notice: 'Article was successfully created.' }
         format.json { render :show, status: :created, location: @article }
       else
-        format.html { render :new }
-        format.json { render json: @article.errors, status: :unprocessable_entity }
+          format.html { render :new }
+          format.json { render json: @article.errors, status: :unprocessable_entity }
       end
-    end
+    end 
   end
 
   # PATCH/PUT /articles/1
