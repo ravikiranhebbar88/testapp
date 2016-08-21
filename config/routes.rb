@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :users
   resources :tags
   mount Bootsy::Engine => '/bootsy', as: 'bootsy'
   resources :articles

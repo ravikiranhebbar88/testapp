@@ -1,5 +1,5 @@
 class ArticlesController < ApplicationController
-  
+  before_action :authenticate_user!, :except => [:index]
   before_action :set_article, only: [:show, :edit, :update, :destroy]
   
 
@@ -16,7 +16,7 @@ class ArticlesController < ApplicationController
 
   # GET /articles/new
   def new
-    @article = Article.new
+    @article = current_user.articles.build
     @tags = @article.tags
   end
 
@@ -29,7 +29,7 @@ class ArticlesController < ApplicationController
   # POST /articles
   # POST /articles.json
   def create
-    @article = Article.new(article_params)
+    @article = current_user.articles.build(article_params)
     respond_to do |format|
       if @article.save
         params[:tags].each do |tag|
@@ -89,7 +89,6 @@ class ArticlesController < ApplicationController
   # DELETE /articles/1.json
   def destroy
     @article.destroy
-    ArticleTag.where(article_id: @article.id).destroy_all
     respond_to do |format|
       format.html { redirect_to articles_url, notice: 'Article was successfully destroyed.' }
       format.json { head :no_content }
