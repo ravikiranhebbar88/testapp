@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160821123007) do
+ActiveRecord::Schema.define(version: 20160827140244) do
 
   create_table "article_tags", force: :cascade do |t|
     t.integer  "article_id"
@@ -26,6 +26,7 @@ ActiveRecord::Schema.define(version: 20160821123007) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.integer  "user_id"
+    t.string   "permalink"
   end
 
   create_table "bootsy_image_galleries", force: :cascade do |t|
@@ -49,6 +50,7 @@ ActiveRecord::Schema.define(version: 20160821123007) do
   end
 
   create_table "users", force: :cascade do |t|
+    t.boolean  "admin"
     t.string   "email",                  default: "", null: false
     t.string   "encrypted_password",     default: "", null: false
     t.string   "reset_password_token"

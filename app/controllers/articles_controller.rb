@@ -1,12 +1,12 @@
 class ArticlesController < ApplicationController
-  before_action :authenticate_user!, :except => [:index]
+  before_action :authenticate_user!
   before_action :set_article, only: [:show, :edit, :update, :destroy]
   
 
   # GET /articles
   # GET /articles.json
   def index
-    @articles = Article.all
+    @articles = current_user.articles
   end
 
   # GET /articles/1
@@ -40,7 +40,7 @@ class ArticlesController < ApplicationController
             else
                  tag = tag.to_i
             end 
-            ArticleTag.create!(:article_id => @article.id,:tag_id => tag.to_i)  
+            ArticleTag.create!(:article_id => @article.id,:tag_id => tag)  
           end 
         end   
         format.html { redirect_to @article, notice: 'Article was successfully created.' }
@@ -100,7 +100,10 @@ class ArticlesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_article
-      @article = Article.find(params[:id])
+      @article = Article.find_by_permalink(params[:id].gsub(/\d+-/,''))
+      if @article.nil?
+         redirect_to articles_path
+      end  
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

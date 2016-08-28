@@ -29,6 +29,7 @@ gem "bootsy"
 gem 'compass-rails'
 gem 'chosen-rails'
 gem 'devise'
+gem 'rails_admin'
 
 
 # Use ActiveModel has_secure_password
